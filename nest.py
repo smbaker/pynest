@@ -19,16 +19,26 @@
 
 import urllib
 import urllib2
-import json
 import sys
 from optparse import OptionParser
 
+try:
+   import json
+except ImportError:
+   try:
+       import simplejson as json
+   except ImportError:
+       print "No json library available. I recommend installing either python-json"
+       print "or simpejson."
+       sys.exit(-1)
+
 class Nest:
-    def __init__(self, username, password, serial=None, units="F"):
+    def __init__(self, username, password, serial=None, index=0, units="F"):
         self.username = username
         self.password = password
         self.serial = serial
         self.units = units
+        self.index = index
 
     def loads(self, res):
         if hasattr(json, "loads"):
@@ -66,7 +76,7 @@ class Nest:
         self.structure_id = res["structure"].keys()[0]
 
         if (self.serial is None):
-            self.device_id = res["structure"][self.structure_id]["devices"][0]
+            self.device_id = res["structure"][self.structure_id]["devices"][self.index]
             self.serial = self.device_id.split(".")[1]
 
         self.status = res
@@ -145,6 +155,13 @@ def create_parser():
    parser.add_option("-c", "--celsius", dest="celsius", action="store_true", default=False,
                      help="use celsius instead of farenheit")
 
+   parser.add_option("-s", "--serial", dest="serial", default=None,
+                     help="optional, specify serial number of nest thermostat to talk to")
+
+   parser.add_option("-i", "--index", dest="index", default=0, type="int",
+                     help="optional, specify index number of nest to talk to")
+
+
    return parser
 
 def help():
@@ -153,6 +170,9 @@ def help():
     print "   --user <username>      ... username on nest.com"
     print "   --password <password>  ... password on nest.com"
     print "   --celsius              ... use celsius (the default is farenheit)"
+    print "   --serial <number>      ... optional, specify serial number of nest to use"
+    print "   --index <number>       ... optional, 0-based index of nest"
+    print "                                (use --serial or --index, but not both)"
     print
     print "commands: temp, fan, show, curtemp, curhumid"
     print "    temp <temperature>    ... set target temperature"
@@ -182,7 +202,7 @@ def main():
     else:
         units = "F"
 
-    n = Nest(opts.user, opts.password, units=units)
+    n = Nest(opts.user, opts.password, opts.serial, opts.index, units=units)
     n.login()
     n.get_status()
 
