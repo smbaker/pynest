@@ -29,7 +29,7 @@ except ImportError:
        import simplejson as json
    except ImportError:
        print "No json library available. I recommend installing either python-json"
-       print "or simpejson."
+       print "or simplejson. Python 2.6+ contains json library already."
        sys.exit(-1)
 
 class Nest:
