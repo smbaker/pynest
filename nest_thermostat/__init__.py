@@ -129,3 +129,14 @@ class Nest:
         return self._set_shared({
             "target_temperature_type": str(state)
         })
+
+    def toggle_away(self):
+        was_away = self.status['structure'][self.structure_id]['away']
+        data = '{"away":%s}' % ('false' if was_away else 'true')
+        response = requests.post(self.transport_url + "/v2/put/structure." + self.structure_id,
+                                 data = data,
+                                 headers = {"user-agent":"Nest/1.1.0.10 CFNetwork/548.0.4",
+                                            "Authorization":"Basic " + self.access_token,
+                                            "X-nl-protocol-version": "1"})
+        response.raise_for_status()
+        return response

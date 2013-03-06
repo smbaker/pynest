@@ -45,6 +45,7 @@ def help():
     print "    temp <temperature>         ... set target temperature"
     print "    fan [auto|on]              ... set fan state"
     print "    mode [cool|heat|range|off] ... set fan state"
+    print "    away                       ... toggle away"
     print "    show                       ... show everything"
     print "    curtemp                    ... print current temperature"
     print "    curhumid                   ... print current humidity"
@@ -92,6 +93,8 @@ def main():
             print "valid modes are cool, heat, range, and off"
             sys.exit(-1)
         n.set_mode(args[1])
+    elif (cmd == "away"):
+        n.toggle_away()
     elif (cmd == "show"):
         n.show_status()
     elif (cmd == "curtemp"):
