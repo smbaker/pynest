@@ -140,6 +140,19 @@ class Nest:
         res = urllib2.urlopen(req).read()
 
         print res
+    
+    def toggle_away(self):
+        was_away = self.status['structure'][self.structure_id]['away']
+        data = '{"away":%s}' % ('false' if was_away else 'true')
+        req = urllib2.Request(self.transport_url + "/v1/put/structure." + self.structure_id,
+                              data,
+                              {"user-agent":"Nest/1.1.0.10 CFNetwork/548.0.4",
+                               "Authorization":"Basic " + self.access_token,
+                               "X-nl-protocol-version": "1"})
+
+        res = urllib2.urlopen(req).read()
+
+        print res
 
 def create_parser():
    parser = OptionParser(usage="nest [options] command [command_options] [command_args]",
@@ -174,9 +187,10 @@ def help():
     print "   --index <number>       ... optional, 0-based index of nest"
     print "                                (use --serial or --index, but not both)"
     print
-    print "commands: temp, fan, show, curtemp, curhumid"
+    print "commands: temp, fan, show, curtemp, curhumid, away"
     print "    temp <temperature>    ... set target temperature"
     print "    fan [auto|on]         ... set fan state"
+    print "    away                  ... toggle away"
     print "    show                  ... show everything"
     print "    curtemp               ... print current temperature"
     print "    curhumid              ... print current humidity"
@@ -218,6 +232,8 @@ def main():
             print "please specify a fan state of 'on' or 'auto'"
             sys.exit(-1)
         n.set_fan(args[1])
+    elif (cmd == "away"):
+        n.toggle_away()
     elif (cmd == "show"):
         n.show_status()
     elif (cmd == "curtemp"):
