@@ -1,8 +1,14 @@
  pynest -- a python interface for the Nest Thermostat
  by Scott M Baker, smbaker@gmail.com, http://www.smbaker.com/
 
+ pyenest - the above, Altered
+ by Eugene Efremov, eaefremov@gmail.com
+
  Usage:
-    'nest.py help' will tell you what to do and how to do it
+    'nest.py' can be used from the command line exactly as before.
+    It can also be imported and used programmatically, either exactly as Scott's version,
+    or by passing parameters identifying specific structures and devices for setups where
+    you have multiples or want to be agnostic.
 
  Example:
     'nest.py --user joe@user.com --password swordfish temp 73'
@@ -25,4 +31,6 @@
  Acknowledgements:
     Chris Burris's Siri Nest Proxy was very helpful to learn the nest's
        authentication and some bits of the protocol.
+    Scott Baker's nest.py, which I (Eugene Efremov) shamelessly bastardized, was irreplaceable
+       and without it I likely wouldn't have done any of this.
 
