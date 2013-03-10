@@ -33,11 +33,10 @@ except ImportError:
        sys.exit(-1)
 
 class Nest:
-    def __init__(self, username, password, serial=None, index=0, units="F"):
+    def __init__(self, username, password, serial=None, index=0):
         self.username = username
         self.password = password
         self.serial = serial
-        self.units = units
         self.index = index
 
     def loads(self, res):
@@ -87,18 +86,6 @@ class Nest:
         #print "res[device][serial].keys", res["device"][self.serial].keys()
         #print "res[shared][serial].keys", res["shared"][self.serial].keys()
 
-    def temp_in(self, temp):
-        if (self.units == "F"):
-            return (temp - 32.0) / 1.8
-        else:
-            return temp
-
-    def temp_out(self, temp):
-        if (self.units == "F"):
-            return temp*1.8 + 32.0
-        else:
-            return temp
-
     def show_status(self):
         shared = self.status["shared"][self.serial]
         device = self.status["device"][self.serial]
@@ -111,12 +98,10 @@ class Nest:
 
     def show_curtemp(self):
         temp = self.status["shared"][self.serial]["current_temperature"]
-        temp = self.temp_out(temp)
 
         print "%0.1f" % temp
 
     def set_temperature(self, temp):
-        temp = self.temp_in(temp)
 
         data = '{"target_change_pending":true,"target_temperature":' + '%0.1f' % temp + '}'
         req = urllib2.Request(self.transport_url + "/v2/put/shared." + self.serial,
@@ -165,9 +150,6 @@ def create_parser():
    parser.add_option("-p", "--password", dest="password",
                      help="password for nest.com", metavar="PASSWORD", default=None)
 
-   parser.add_option("-c", "--celsius", dest="celsius", action="store_true", default=False,
-                     help="use celsius instead of farenheit")
-
    parser.add_option("-s", "--serial", dest="serial", default=None,
                      help="optional, specify serial number of nest thermostat to talk to")
 
@@ -182,7 +164,6 @@ def help():
     print "options:"
     print "   --user <username>      ... username on nest.com"
     print "   --password <password>  ... password on nest.com"
-    print "   --celsius              ... use celsius (the default is farenheit)"
     print "   --serial <number>      ... optional, specify serial number of nest to use"
     print "   --index <number>       ... optional, 0-based index of nest"
     print "                                (use --serial or --index, but not both)"
@@ -211,12 +192,7 @@ def main():
         print "how about specifying a --user and --password option next time?"
         sys.exit(-1)
 
-    if opts.celsius:
-        units = "C"
-    else:
-        units = "F"
-
-    n = Nest(opts.user, opts.password, opts.serial, opts.index, units=units)
+    n = Nest(opts.user, opts.password, opts.serial, opts.index)
     n.login()
     n.get_status()
 
