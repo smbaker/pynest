@@ -1,1 +1,1 @@
-﻿# necessary to use pynest as a lib.
+﻿__author__ = "Eugene Efremov"

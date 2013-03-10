@@ -5,21 +5,12 @@
  by Eugene Efremov, eaefremov@gmail.com
 
  Usage:
-    'nest.py' can be used from the command line exactly as before.
-    It can also be imported and used programmatically, either exactly as Scott's version,
-    or by passing parameters identifying specific structures and devices for setups where
+    'nest.py' can be imported and used programmatically, generally by passing
+    parameters identifying specific structures and devices, meant for setups where
     you have multiples or want to be agnostic.
 
- Example:
-    'nest.py --user joe@user.com --password swordfish temp 73'
-         set the temperature to 73 degrees
-
-    'nest.py --user joe@user.com --password swordfish fan auto'
-         set the fan to automatic
-
  Installation:
-    'python ./setup.py install' will install nest.py to the right place,
-    usually your /usr/bin directory.
+    pip install pyenest will do you right.
 
  Licensing:
     This is distributed unider the Creative Commons 3.0 Non-commecrial,
@@ -33,4 +24,3 @@
        authentication and some bits of the protocol.
     Scott Baker's nest.py, which I (Eugene Efremov) shamelessly bastardized, was irreplaceable
        and without it I likely wouldn't have done any of this.
-

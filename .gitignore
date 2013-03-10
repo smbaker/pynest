@@ -1,2 +1,8 @@
 ﻿
 *.pyc
+*.csproj*
+*.sln
+*.suo
+Properties
+obj
+bin
