@@ -1,4 +1,4 @@
-﻿
+
 *.pyc
 *.csproj*
 *.sln
@@ -6,3 +6,5 @@
 Properties
 obj
 bin
+dist
+*.egg-info*

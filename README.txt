@@ -1,11 +1,11 @@
  pynest is a python interface for the Nest Thermostat
  by Scott M Baker, smbaker@gmail.com, http://www.smbaker.com/
 
- pyenest is the above, Altered
+ pyenest is the above, Edited
  by Eugene Efremov, eaefremov@gmail.com
 
  Usage:
-    'nest.py' can be imported and used programmatically, generally by passing
+    'nest.py' can be imported and used programmatically by passing
     parameters identifying specific structures and devices, meant for setups where
     you have multiples or want to be agnostic.
 
