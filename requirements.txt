@@ -1,1 +1,1 @@
-eusful==0.5
+eusful==0.6
