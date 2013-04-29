@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 readme = open('README.txt').read()
 setup(name='pyenest',
-      version='0.3',
+      version='0.4',
       description='Python API for Nest Thermostat - Edited',
       author='Eugene Efremov',
       author_email='eaefremov@gmail.com',
