@@ -2,17 +2,17 @@
  by Scott M Baker, smbaker@gmail.com, http://www.smbaker.com/
 
  Usage:
-    'nest.py help' will tell you what to do and how to do it
+    'nesttool.py help' will tell you what to do and how to do it
 
  Example:
-    'nest.py --user joe@user.com --password swordfish temp 73'
+    'nesttool.py --user joe@user.com --password swordfish temp 73'
          set the temperature to 73 degrees
 
-    'nest.py --user joe@user.com --password swordfish fan auto'
+    'nesttool.py --user joe@user.com --password swordfish fan auto'
          set the fan to automatic
 
  Installation:
-    'python ./setup.py install' will install nest.py to the right place,
+    'python ./setup.py install' will install nesttool.py and nest_cosm.py to the right place,
     usually your /usr/bin directory.
 
  Licensing:
