@@ -8,5 +8,6 @@ setup(name='pynest',
       author='Scott Baker',
       author_email='smbaker@gmail.com',
       url='http://www.smbaker.com/',
-      scripts=['nest.py'],
+      py_modules = ['cosm','nest']
+      scripts=['nesttool.py','nest_cosm.py'],
      )
