@@ -14,7 +14,10 @@ It is using cosm.cfg which is JSON dictionary with following fields:
           "current_temperature":1,
           "current_humidity":2,
           "fan_mode":3,
- }
+          "hvac_ac_state": 4,
+          "hvac_heater_state":5,
+          "battery_level":100
+}
 }
 """
 
