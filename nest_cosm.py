@@ -20,12 +20,12 @@ It is using cosm.cfg which is JSON dictionary with following fields:
                         "auto":0
                     }},
         "hvac_ac_state": {"datastream":4,"mapping":{
-            "False":9,
-            "True":0
+            "False":0,
+            "True":1
         }},
         "hvac_heater_state":{"datastream":5,"mapping":{
-            "False":9,
-            "True":0
+            "False":0,
+            "True":1
         }},
         "battery_level":{"datastream":100}
     }
