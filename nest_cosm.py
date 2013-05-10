@@ -5,19 +5,30 @@ This script will read nest thermostat values and will post to COSM.com
 It is using cosm.cfg which is JSON dictionary with following fields:
 
 {
-"key":"your key"
-"feed":123,
- "nest_user":"user@example.com",
- "nest_password":"secret",
- "units":"C",
- "fields": {
-          "current_temperature":1,
-          "current_humidity":2,
-          "fan_mode":3,
-          "hvac_ac_state": 4,
-          "hvac_heater_state":5,
-          "battery_level":100
-}
+   "key":"your key"
+   "feed":123,
+    "nest_user":"user@example.com",
+    "nest_password":"secret",
+    "units":"C",
+    "fields": {
+        "current_temperature":{"datastream":1},
+        "current_humidity":{"datastream":2},
+        "fan_mode":{"datastream":3, 
+                    "mapping":{
+                        "off":-1,
+                        "on":1,
+                        "auto":0
+                    }},
+        "hvac_ac_state": {"datastream":4,"mapping":{
+            "False":9,
+            "True":0
+        }},
+        "hvac_heater_state":{"datastream":5,"mapping":{
+            "False":9,
+            "True":0
+        }},
+        "battery_level":{"datastream":100}
+    }
 }
 """
 
@@ -114,7 +125,17 @@ def main():
     data = ""
     for fname,fds in fields.items():
         if allvars.has_key(fname):
-            data = data + string.join([str(fds),str(allvars[fname])],",")+"\r\n"
+            ds = str(fds["datastream"])
+            if fds.has_key("mapping"):
+                rv = str(allvars[fname])
+                if fds["mapping"].has_key(rv):
+                    v = str(fds["mapping"][rv])
+                else:
+                    log.error("Unknown value '%s' for mapped field '%s" % (rv,fname))
+                    continue
+            else:
+                v= str(allvars[fname])
+            data = data + string.join([ds,v],",")+"\r\n"
         else:
             log.warning("Field '%s' not found!", fname)
     try:
