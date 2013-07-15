@@ -9,4 +9,6 @@ setup(name='pynest',
       author_email='smbaker@gmail.com',
       url='http://www.smbaker.com/',
       scripts=['nest.py'],
+      packages=['pynest'],
+      install_requires = ['requests']
      )
