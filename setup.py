@@ -10,5 +10,5 @@ setup(name='pynest',
       url='http://www.smbaker.com/',
       scripts=['nest.py'],
       packages=['pynest'],
-      requires = ['requests']
+      install_requires = ['requests']
      )
