@@ -2,9 +2,7 @@
 
 # nest.py -- a python interface to the Nest Thermostat
 # by Scott M Baker, smbaker@gmail.com, http://www.smbaker.com/
-#
-# Usage:
-#    'nest.py help' will tell you what to do and how to do it
+# updated by Bob Pasker bob@pasker.net http://pasker.net
 #
 # Licensing:
 #    This is distributed unider the Creative Commons 3.0 Non-commecrial,
@@ -19,6 +17,7 @@
 
 import urllib
 import urllib2
+import requests
 
 try:
    import json
@@ -26,54 +25,46 @@ except ImportError:
    import simplejson as json
    
 class Nest:
-    def __init__(self, username, password, serial=None, index=0, units="F"):
+    def __init__(self, username, password, serial=None, index=0, units="F", debug=False):
         self.username = username
         self.password = password
         self.serial = serial
         self.units = units
         self.index = index
-
-    def loads(self, res):
-        if hasattr(json, "loads"):
-            res = json.loads(res)
-        else:
-            res = json.read(res)
-        return res
+        self.debug = debug
 
     def login(self):
-        data = urllib.urlencode({"username": self.username, "password": self.password})
+       
+       response = requests.post("https://home.nest.com/user/login",
+                                data = {"username":self.username, "password" : self.password},
+                                headers = {"user-agent":"Nest/1.1.0.10 CFNetwork/548.0.4"})
 
-        req = urllib2.Request("https://home.nest.com/user/login",
-                              data,
-                              {"user-agent":"Nest/1.1.0.10 CFNetwork/548.0.4"})
-
-        res = urllib2.urlopen(req).read()
-
-        res = self.loads(res)
-
-        self.transport_url = res["urls"]["transport_url"]
-        self.access_token = res["access_token"]
-        self.userid = res["userid"]
+       response.raise_for_status()
+       
+       res = response.json()
+       self.transport_url = res["urls"]["transport_url"]
+       self.access_token = res["access_token"]
+       self.userid = res["userid"]
+       # print self.transport_url, self.access_token, self.userid
 
     def get_status(self):
-        req = urllib2.Request(self.transport_url + "/v2/mobile/user." + self.userid,
-                              headers={"user-agent":"Nest/1.1.0.10 CFNetwork/548.0.4",
-                                       "Authorization":"Basic " + self.access_token,
-                                       "X-nl-user-id": self.userid,
-                                       "X-nl-protocol-version": "1"})
+       response = requests.get(self.transport_url + "/v2/mobile/user." + self.userid,
+                               headers={"user-agent":"Nest/1.1.0.10 CFNetwork/548.0.4",
+                                        "Authorization":"Basic " + self.access_token,
+                                        "X-nl-user-id": self.userid,
+                                        "X-nl-protocol-version": "1"})
 
-        res = urllib2.urlopen(req).read()
+       response.raise_for_status()
+       res = response.json()
 
-        res = self.loads(res)
-
-        self.structure_id = res["structure"].keys()[0]
-
-        if (self.serial is None):
-            self.device_id = res["structure"][self.structure_id]["devices"][self.index]
-            self.serial = self.device_id.split(".")[1]
-
-        self.status = res
-
+       self.structure_id = res["structure"].keys()[0]
+       
+       if (self.serial is None):
+          self.device_id = res["structure"][self.structure_id]["devices"][self.index]
+          self.serial = self.device_id.split(".")[1]
+          
+          self.status = res
+          
         #print "res.keys", res.keys()
         #print "res[structure][structure_id].keys", res["structure"][self.structure_id].keys()
         #print "res[device].keys", res["device"].keys()
@@ -108,29 +99,34 @@ class Nest:
 
         print "%0.1f" % temp
 
+    def _set(self, data, which):
+       if (self.debug): print json.dumps(data)
+       url = "%s/v2/put/%s.%s" %  (self.transport_url, which, self.serial)
+       if (self.debug): print url
+       response = requests.post(url,
+                                data = json.dumps(data),
+                                headers = {"user-agent":"Nest/1.1.0.10 CFNetwork/548.0.4",
+                                           "Authorization":"Basic " + self.access_token,
+                                           "X-nl-protocol-version": "1"})
+        
+       if response.status_code > 200:
+          if (self.debug): print response.content
+       response.raise_for_status()
+       return response
+
+    def _set_shared(self, data):
+       self._set(data, "shared")
+
+    def _set_device(self, data):
+       self._set(data, "device")
+       
     def set_temperature(self, temp):
-        temp = self.temp_in(temp)
-
-        data = '{"target_change_pending":true,"target_temperature":' + '%0.1f' % temp + '}'
-        req = urllib2.Request(self.transport_url + "/v2/put/shared." + self.serial,
-                              data,
-                              {"user-agent":"Nest/1.1.0.10 CFNetwork/548.0.4",
-                               "Authorization":"Basic " + self.access_token,
-                               "X-nl-protocol-version": "1"})
-
-        res = urllib2.urlopen(req).read()
-
-        print res
-
+       return self._set_shared({
+             "target_change_pending": True,
+             "target_temperature" : self.temp_in(temp)
+             })
+    
     def set_fan(self, state):
-        data = '{"fan_mode":"' + str(state) + '"}'
-        req = urllib2.Request(self.transport_url + "/v2/put/device." + self.serial,
-                              data,
-                              {"user-agent":"Nest/1.1.0.10 CFNetwork/548.0.4",
-                               "Authorization":"Basic " + self.access_token,
-                               "X-nl-protocol-version": "1"})
-
-        res = urllib2.urlopen(req).read()
-
-        print res
-
+       return self._set_device({
+             "fan_mode": str(state)
+             })
