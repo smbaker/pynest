@@ -115,6 +115,11 @@ class Nest:
 
         print "%0.1f" % temp
 
+    def show_curmode(self):
+        mode = self.status["shared"][self.serial]["target_temperature_type"]
+        
+        print mode
+
     def set_temperature(self, temp):
         temp = self.temp_in(temp)
 
@@ -136,6 +141,14 @@ class Nest:
                               {"user-agent":"Nest/1.1.0.10 CFNetwork/548.0.4",
                                "Authorization":"Basic " + self.access_token,
                                "X-nl-protocol-version": "1"})
+
+        res = urllib2.urlopen(req).read()
+
+        print res
+
+    def set_mode(self, state):
+        data = '{"target_temperature_type":"' + str(state) + '"}'
+        req = urllib2.Request(self.transport_url + "/v2/put/shared." + self.serial, data, {"user-agent":"Nest/1.1.0.10 CFNetwork/548.0.4", "Authorization":"Basic " + self.access_token, "X-nl-protocol-version": "1"})
 
         res = urllib2.urlopen(req).read()
 
@@ -175,11 +188,13 @@ def help():
     print "                                (use --serial or --index, but not both)"
     print
     print "commands: temp, fan, show, curtemp, curhumid"
-    print "    temp <temperature>    ... set target temperature"
-    print "    fan [auto|on]         ... set fan state"
-    print "    show                  ... show everything"
-    print "    curtemp               ... print current temperature"
-    print "    curhumid              ... print current humidity"
+    print "    temp <temperature>         ... set target temperature"
+    print "    fan [auto|on]              ... set fan state"
+    print "    mode [cool|heat|range|off] ... set fan state"
+    print "    show                       ... show everything"
+    print "    curtemp                    ... print current temperature"
+    print "    curhumid                   ... print current humidity"
+    print "    curmode                    ... print current mode"
     print
     print "examples:"
     print "    nest.py --user joe@user.com --password swordfish temp 73"
@@ -218,10 +233,17 @@ def main():
             print "please specify a fan state of 'on' or 'auto'"
             sys.exit(-1)
         n.set_fan(args[1])
+    elif (cmd == "mode"):
+        if len(args)<2:
+            print "valid modes are cool, heat, range, and off"
+            sys.exit(-1)
+        n.set_mode(args[1])
     elif (cmd == "show"):
         n.show_status()
     elif (cmd == "curtemp"):
         n.show_curtemp()
+    elif (cmd == "curmode"):
+        n.show_curmode()
     elif (cmd == "curhumid"):
         print n.status["device"][n.serial]["current_humidity"]
     else:
