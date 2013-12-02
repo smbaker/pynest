@@ -120,6 +120,12 @@ class Nest:
         
         print mode
 
+    def show_target(self):
+        target_temp = self.status["shared"][self.serial]["target_temperature"]
+        target = (target_temp * 1.8) + 32
+        
+        print target
+
     def set_temperature(self, temp):
         temp = self.temp_in(temp)
 
@@ -195,6 +201,7 @@ def help():
     print "    curtemp                    ... print current temperature"
     print "    curhumid                   ... print current humidity"
     print "    curmode                    ... print current mode"
+    print "    curtarget                  ... print current target temp"
     print
     print "examples:"
     print "    nest.py --user joe@user.com --password swordfish temp 73"
@@ -244,6 +251,8 @@ def main():
         n.show_curtemp()
     elif (cmd == "curmode"):
         n.show_curmode()
+    elif (cmd == "curtarget"):
+        n.show_target()
     elif (cmd == "curhumid"):
         print n.status["device"][n.serial]["current_humidity"]
     else:
