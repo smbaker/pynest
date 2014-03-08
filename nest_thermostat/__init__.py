@@ -88,6 +88,11 @@ class Nest:
 
         print "%0.1f" % temp
 
+    def show_curmode(self):
+        mode = self.status["shared"][self.serial]["target_temperature_type"]
+
+        print mode
+
     def _set(self, data, which):
        if (self.debug): print json.dumps(data)
        url = "%s/v2/put/%s.%s" %  (self.transport_url, which, self.serial)
@@ -119,3 +124,8 @@ class Nest:
        return self._set_device({
              "fan_mode": str(state)
              })
+
+    def set_mode(self, state):
+        return self._set_shared({
+            "target_temperature_type": str(state)
+        })

@@ -41,12 +41,14 @@ def help():
     print "   --index <number>       ... optional, 0-based index of nest"
     print "                                (use --serial or --index, but not both)"
     print
-    print "commands: temp, fan, show, curtemp, curhumid"
-    print "    temp <temperature>    ... set target temperature"
-    print "    fan [auto|on]         ... set fan state"
-    print "    show                  ... show everything"
-    print "    curtemp               ... print current temperature"
-    print "    curhumid              ... print current humidity"
+    print "commands:"
+    print "    temp <temperature>         ... set target temperature"
+    print "    fan [auto|on]              ... set fan state"
+    print "    mode [cool|heat|range|off] ... set fan state"
+    print "    show                       ... show everything"
+    print "    curtemp                    ... print current temperature"
+    print "    curhumid                   ... print current humidity"
+    print "    curmode                    ... print current mode"
     print
     print "examples:"
     print "    nest.py --user joe@user.com --password swordfish temp 73"
@@ -85,10 +87,17 @@ def main():
             print "please specify a fan state of 'on' or 'auto'"
             sys.exit(-1)
         n.set_fan(args[1])
+    elif (cmd == "mode"):
+        if len(args)<2:
+            print "valid modes are cool, heat, range, and off"
+            sys.exit(-1)
+        n.set_mode(args[1])
     elif (cmd == "show"):
         n.show_status()
     elif (cmd == "curtemp"):
         n.show_curtemp()
+    elif (cmd == "curmode"):
+        n.show_curmode()
     elif (cmd == "curhumid"):
         print n.status["device"][n.serial]["current_humidity"]
     else:
@@ -97,8 +106,3 @@ def main():
 
 if __name__=="__main__":
    main()
-
-
-
-
-
