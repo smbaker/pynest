@@ -32,4 +32,7 @@ examples:
     nest.py --user joe@user.com --password swordfish fan auto
 ```
 
+
+---
+
 *Chris Burris's Siri Nest Proxy was very helpful to learn the Nest's authentication and some bits of the protocol.*
