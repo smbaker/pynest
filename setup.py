@@ -2,11 +2,13 @@
 
 from distutils.core import setup
 
-setup(name='pynest',
-      version='1.0',
-      description='Python API for Nest Thermostat',
+setup(name='nest_thermostat',
+      version='1.1',
+      description='Python API and command line tool for talking to the Nest™ Thermostat',
       author='Scott Baker',
       author_email='smbaker@gmail.com',
-      url='http://www.smbaker.com/',
+      maintainer='Filippo Valsorda',
+      maintainer_email='hi@filippo.io',
+      url='https://github.com/FiloSottile/nest_thermostat/',
       scripts=['nest.py'],
-     )
+)
