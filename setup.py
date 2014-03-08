@@ -11,6 +11,6 @@ setup(name='nest_thermostat',
       maintainer_email='hi@filippo.io',
       url='https://github.com/FiloSottile/nest_thermostat/',
       scripts=['nest.py'],
-      packages=['pynest'],
+      packages=['nest_thermostat'],
       install_requires = ['requests']
 )

@@ -10,6 +10,13 @@ usually your /usr/bin directory.
 
 ##Usage
 
+### Module
+
+You can import the module as `nest_thermostat`. Use the source, luke!
+
+Tips: you need to manually call `.login()` first, and `.get_status()` before `.show_*()`
+
+### Command line
 ```
 syntax: nest.py [options] command [command_args]
 options:

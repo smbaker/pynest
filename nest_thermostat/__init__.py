@@ -1,29 +1,18 @@
 #! /usr/bin/python
 
-# nest.py -- a python interface to the Nest Thermostat
-# by Scott M Baker, smbaker@gmail.com, http://www.smbaker.com/
-# updated by Bob Pasker bob@pasker.net http://pasker.net
-#
-# Licensing:
-#    This is distributed unider the Creative Commons 3.0 Non-commecrial,
-#    Attribution, Share-Alike license. You can use the code for noncommercial
-#    purposes. You may NOT sell it. If you do use it, then you must make an
-#    attribution to me (i.e. Include my name and thank me for the hours I spent
-#    on this)
-#
-# Acknowledgements:
-#    Chris Burris's Siri Nest Proxy was very helpful to learn the nest's
-#       authentication and some bits of the protocol.
+"""
+nest_thermostat -- a python interface to the Nest Thermostat
+by Scott M Baker, smbaker@gmail.com, http://www.smbaker.com/
+updated by Bob Pasker bob@pasker.net http://pasker.net
+"""
 
-import urllib
-import urllib2
 import requests
 
 try:
    import json
 except ImportError:
    import simplejson as json
-   
+
 class Nest:
     def __init__(self, username, password, serial=None, index=0, units="F", debug=False):
         self.username = username
@@ -34,13 +23,13 @@ class Nest:
         self.debug = debug
 
     def login(self):
-       
+
        response = requests.post("https://home.nest.com/user/login",
                                 data = {"username":self.username, "password" : self.password},
                                 headers = {"user-agent":"Nest/1.1.0.10 CFNetwork/548.0.4"})
 
        response.raise_for_status()
-       
+
        res = response.json()
        self.transport_url = res["urls"]["transport_url"]
        self.access_token = res["access_token"]
@@ -58,13 +47,13 @@ class Nest:
        res = response.json()
 
        self.structure_id = res["structure"].keys()[0]
-       
+
        if (self.serial is None):
           self.device_id = res["structure"][self.structure_id]["devices"][self.index]
           self.serial = self.device_id.split(".")[1]
-          
+
           self.status = res
-          
+
         #print "res.keys", res.keys()
         #print "res[structure][structure_id].keys", res["structure"][self.structure_id].keys()
         #print "res[device].keys", res["device"].keys()
@@ -108,7 +97,7 @@ class Nest:
                                 headers = {"user-agent":"Nest/1.1.0.10 CFNetwork/548.0.4",
                                            "Authorization":"Basic " + self.access_token,
                                            "X-nl-protocol-version": "1"})
-        
+
        if response.status_code > 200:
           if (self.debug): print response.content
        response.raise_for_status()
@@ -119,13 +108,13 @@ class Nest:
 
     def _set_device(self, data):
        self._set(data, "device")
-       
+
     def set_temperature(self, temp):
        return self._set_shared({
              "target_change_pending": True,
              "target_temperature" : self.temp_in(temp)
              })
-    
+
     def set_fan(self, state):
        return self._set_device({
              "fan_mode": str(state)
