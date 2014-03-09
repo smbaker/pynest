@@ -5,8 +5,7 @@
 *fork of pynest by Scott M Baker, smbaker@gmail.com, http://www.smbaker.com/*
 
 ##Installation
-`python ./setup.py install` will install nest.py to the right place,
-usually your /usr/bin directory.
+`[sudo] pip install nest_thermostat`
 
 ##Usage
 
