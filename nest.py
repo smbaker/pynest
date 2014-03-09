@@ -32,7 +32,7 @@ def create_parser():
    return parser
 
 def help():
-    print "syntax: nest [options] command [command_args]"
+    print "syntax: nest.py [options] command [command_args]"
     print "options:"
     print "   --user <username>      ... username on nest.com"
     print "   --password <password>  ... password on nest.com"

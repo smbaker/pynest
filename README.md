@@ -27,12 +27,15 @@ options:
    --index <number>       ... optional, 0-based index of nest
                                 (use --serial or --index, but not both)
 
-commands: temp, fan, show, curtemp, curhumid
-    temp <temperature>    ... set target temperature
-    fan [auto|on]         ... set fan state
-    show                  ... show everything
-    curtemp               ... print current temperature
-    curhumid              ... print current humidity
+commands:
+    temp <temperature>         ... set target temperature
+    fan [auto|on]              ... set fan state
+    mode [cool|heat|range|off] ... set fan state
+    away                       ... toggle away
+    show                       ... show everything
+    curtemp                    ... print current temperature
+    curhumid                   ... print current humidity
+    curmode                    ... print current mode
 
 examples:
     nest.py --user joe@user.com --password swordfish temp 73
