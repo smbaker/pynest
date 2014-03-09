@@ -196,7 +196,7 @@ def help():
     print "commands: temp, fan, show, curtemp, curhumid"
     print "    temp <temperature>         ... set target temperature"
     print "    fan [auto|on]              ... set fan state"
-    print "    mode [cool|heat|range|off] ... set fan state"
+    print "    mode [cool|heat|range|off] ... set mode state"
     print "    show                       ... show everything"
     print "    curtemp                    ... print current temperature"
     print "    curhumid                   ... print current humidity"
