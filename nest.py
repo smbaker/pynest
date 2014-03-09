@@ -117,13 +117,13 @@ class Nest:
 
     def show_curmode(self):
         mode = self.status["shared"][self.serial]["target_temperature_type"]
-        
+
         print mode
 
     def show_target(self):
         target_temp = self.status["shared"][self.serial]["target_temperature"]
         target = (target_temp * 1.8) + 32
-        
+
         print target
 
     def set_temperature(self, temp):
@@ -261,8 +261,3 @@ def main():
 
 if __name__=="__main__":
    main()
-
-
-
-
-
