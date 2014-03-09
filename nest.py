@@ -193,7 +193,7 @@ def help():
     print "   --index <number>       ... optional, 0-based index of nest"
     print "                                (use --serial or --index, but not both)"
     print
-    print "commands: temp, fan, show, curtemp, curhumid"
+    print "commands: temp, fan, mode, show, curtemp, curhumid"
     print "    temp <temperature>         ... set target temperature"
     print "    fan [auto|on]              ... set fan state"
     print "    mode [cool|heat|range|off] ... set mode state"
