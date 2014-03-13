@@ -44,12 +44,13 @@ def help():
     print "commands:"
     print "    temp <temperature>         ... set target temperature"
     print "    fan [auto|on]              ... set fan state"
-    print "    mode [cool|heat|range|off] ... set fan state"
+    print "    mode [cool|heat|range|off] ... set mode state"
     print "    away                       ... toggle away"
     print "    show                       ... show everything"
     print "    curtemp                    ... print current temperature"
     print "    curhumid                   ... print current humidity"
     print "    curmode                    ... print current mode"
+    print "    curtarget                  ... print current target temp"
     print
     print "examples:"
     print "    nest.py --user joe@user.com --password swordfish temp 73"
@@ -101,6 +102,8 @@ def main():
         n.show_curtemp()
     elif (cmd == "curmode"):
         n.show_curmode()
+    elif (cmd == "curtarget"):
+        n.show_target()
     elif (cmd == "curhumid"):
         print n.status["device"][n.serial]["current_humidity"]
     else:
