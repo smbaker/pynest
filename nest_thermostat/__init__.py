@@ -46,7 +46,7 @@ class Nest:
        response.raise_for_status()
        res = response.json()
 
-       self.structure_id = res["structure"].keys()[0]
+       self.structure_id = list(res["structure"].keys())[0]
 
        if (self.serial is None):
           self.device_id = res["structure"][self.structure_id]["devices"][self.index]
@@ -79,30 +79,31 @@ class Nest:
         allvars = shared
         allvars.update(device)
 
-        for k in sorted(allvars.keys()):
-             print k + "."*(32-len(k)) + ":", allvars[k]
+        for k in sorted(allvars):
+             v = allvars[k] or ''
+             print("%s: %s" % (k, v))
 
     def show_curtemp(self):
         temp = self.status["shared"][self.serial]["current_temperature"]
         temp = self.temp_out(temp)
 
-        print "%0.1f" % temp
+        print("%0.1f" % temp)
 
     def show_target(self):
         temp = self.status["shared"][self.serial]["target_temperature"]
         temp = self.temp_out(temp)
 
-        print temp
+        print( temp)
 
     def show_curmode(self):
         mode = self.status["shared"][self.serial]["target_temperature_type"]
 
-        print mode
+        print( mode)
 
     def _set(self, data, which):
-       if (self.debug): print json.dumps(data)
+       if (self.debug): print( json.dumps(data))
        url = "%s/v2/put/%s.%s" %  (self.transport_url, which, self.serial)
-       if (self.debug): print url
+       if (self.debug): print( url)
        response = requests.post(url,
                                 data = json.dumps(data),
                                 headers = {"user-agent":"Nest/1.1.0.10 CFNetwork/548.0.4",
@@ -110,7 +111,7 @@ class Nest:
                                            "X-nl-protocol-version": "1"})
 
        if response.status_code > 200:
-          if (self.debug): print response.content
+          if (self.debug): print( response.content)
        response.raise_for_status()
        return response
 

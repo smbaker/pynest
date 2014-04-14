@@ -32,29 +32,29 @@ def create_parser():
    return parser
 
 def help():
-    print "syntax: nest.py [options] command [command_args]"
-    print "options:"
-    print "   --user <username>      ... username on nest.com"
-    print "   --password <password>  ... password on nest.com"
-    print "   --celsius              ... use celsius (the default is farenheit)"
-    print "   --serial <number>      ... optional, specify serial number of nest to use"
-    print "   --index <number>       ... optional, 0-based index of nest"
-    print "                                (use --serial or --index, but not both)"
-    print
-    print "commands:"
-    print "    temp <temperature>         ... set target temperature"
-    print "    fan [auto|on]              ... set fan state"
-    print "    mode [cool|heat|range|off] ... set mode state"
-    print "    away                       ... toggle away"
-    print "    show                       ... show everything"
-    print "    curtemp                    ... print current temperature"
-    print "    curhumid                   ... print current humidity"
-    print "    curmode                    ... print current mode"
-    print "    curtarget                  ... print current target temp"
-    print
-    print "examples:"
-    print "    nest.py --user joe@user.com --password swordfish temp 73"
-    print "    nest.py --user joe@user.com --password swordfish fan auto"
+    print( "syntax: nest.py [options] command [command_args]")
+    print( "options:")
+    print( "   --user <username>      ... username on nest.com")
+    print( "   --password <password>  ... password on nest.com")
+    print( "   --celsius              ... use celsius (the default is farenheit)")
+    print( "   --serial <number>      ... optional, specify serial number of nest to use")
+    print( "   --index <number>       ... optional, 0-based index of nest")
+    print( "                                (use --serial or --index, but not both)")
+    print()
+    print( "commands:")
+    print( "    temp <temperature>         ... set target temperature")
+    print( "    fan [auto|on]              ... set fan state")
+    print( "    mode [cool|heat|range|off] ... set mode state")
+    print( "    away                       ... toggle away")
+    print( "    show                       ... show everything")
+    print( "    curtemp                    ... print current temperature")
+    print( "    curhumid                   ... print current humidity")
+    print( "    curmode                    ... print current mode")
+    print( "    curtarget                  ... print current target temp")
+    print()
+    print( "examples:")
+    print( "    nest.py --user joe@user.com --password swordfish temp 73")
+    print( "    nest.py --user joe@user.com --password swordfish fan auto")
 
 def main():
     parser = create_parser()
@@ -65,7 +65,7 @@ def main():
         sys.exit(-1)
 
     if (not opts.user) or (not opts.password):
-        print "how about specifying a --user and --password option next time?"
+        print( "how about specifying a --user and --password option next time?")
         sys.exit(-1)
 
     if opts.celsius:
@@ -81,17 +81,17 @@ def main():
 
     if (cmd == "temp"):
         if len(args)<2:
-            print "please specify a temperature"
+            print( "please specify a temperature")
             sys.exit(-1)
         n.set_temperature(int(args[1]))
     elif (cmd == "fan"):
         if len(args)<2:
-            print "please specify a fan state of 'on' or 'auto'"
+            print( "please specify a fan state of 'on' or 'auto'")
             sys.exit(-1)
         n.set_fan(args[1])
     elif (cmd == "mode"):
         if len(args)<2:
-            print "valid modes are cool, heat, range, and off"
+            print( "valid modes are cool, heat, range, and off")
             sys.exit(-1)
         n.set_mode(args[1])
     elif (cmd == "away"):
@@ -105,10 +105,10 @@ def main():
     elif (cmd == "curtarget"):
         n.show_target()
     elif (cmd == "curhumid"):
-        print n.status["device"][n.serial]["current_humidity"]
+        print( n.status["device"][n.serial]["current_humidity"])
     else:
-        print "misunderstood command:", cmd
-        print "do 'nest.py help' for help"
+        print( "misunderstood command: %s" % cmd)
+        print( "do 'nest.py help' for help")
 
 if __name__=="__main__":
    main()
