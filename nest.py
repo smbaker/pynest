@@ -20,6 +20,8 @@
 import urllib
 import urllib2
 import sys
+import ssl
+import httplib, socket
 from optparse import OptionParser
 
 try:
@@ -31,6 +33,21 @@ except ImportError:
        print "No json library available. I recommend installing either python-json"
        print "or simpejson."
        sys.exit(-1)
+
+#force connection to be TLSv1
+class HTTPSConnectionV1(httplib.HTTPSConnection):
+    def __init__(self, *args, **kwargs):
+        httplib.HTTPSConnection.__init__(self, *args, **kwargs)
+
+    def connect(self):
+        sock = socket.create_connection((self.host, self.port), self.timeout)
+        self.sock = ssl.wrap_socket(sock, self.key_file, self.cert_file, ssl_version=ssl.PROTOCOL_TLSv1)
+        
+class HTTPSHandlerV1(urllib2.HTTPSHandler):
+    def https_open(self, req):
+        return self.do_open(HTTPSConnectionV1, req)
+# install opener
+urllib2.install_opener(urllib2.build_opener(HTTPSHandlerV1()))
 
 class Nest:
     def __init__(self, username, password, serial=None, index=0, units="F"):
