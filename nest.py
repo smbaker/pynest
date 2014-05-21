@@ -41,15 +41,8 @@ class HTTPSConnectionV1(httplib.HTTPSConnection):
 
     def connect(self):
         sock = socket.create_connection((self.host, self.port), self.timeout)
-        if self._tunnel_host:
-            self.sock = sock
-            self._tunnel()
-        try:
-            self.sock = ssl.wrap_socket(sock, self.key_file, self.cert_file, ssl_version=ssl.PROTOCOL_TLSv1)
-        except ssl.SSLError, e:
-            
-            self.sock = ssl.wrap_socket(sock, self.key_file, self.cert_file, ssl_version=ssl.PROTOCOL_TLSv1)
-
+        self.sock = ssl.wrap_socket(sock, self.key_file, self.cert_file, ssl_version=ssl.PROTOCOL_TLSv1)
+        
 class HTTPSHandlerV1(urllib2.HTTPSHandler):
     def https_open(self, req):
         return self.do_open(HTTPSConnectionV1, req)
