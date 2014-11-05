@@ -141,9 +141,22 @@ class Nest:
 
         print res
 
+    def set_mode(self, state):
+        data = '{"target_change_pending":true,"target_temperature_type":"' + str(state) + '"}'
+        print data
+        req = urllib2.Request(self.transport_url + "/v2/put/shared." + self.serial,
+                              data,
+                              {"user-agent":"Nest/1.1.0.10 CFNetwork/548.0.4",
+                               "Authorization":"Basic " + self.access_token,
+                               "X-nl-protocol-version": "1"})
+
+        res = urllib2.urlopen(req).read()
+
+        print res
+
 def create_parser():
    parser = OptionParser(usage="nest [options] command [command_options] [command_args]",
-        description="Commands: fan temp",
+        description="Commands: fan temp mode",
         version="unknown")
 
    parser.add_option("-u", "--user", dest="user",
@@ -174,12 +187,13 @@ def help():
     print "   --index <number>       ... optional, 0-based index of nest"
     print "                                (use --serial or --index, but not both)"
     print
-    print "commands: temp, fan, show, curtemp, curhumid"
-    print "    temp <temperature>    ... set target temperature"
-    print "    fan [auto|on]         ... set fan state"
-    print "    show                  ... show everything"
-    print "    curtemp               ... print current temperature"
-    print "    curhumid              ... print current humidity"
+    print "commands: temp, fan, mode, show, curtemp, curhumid"
+    print "    temp <temperature>        ... set target temperature"
+    print "    fan [auto|on]             ... set fan state"
+    print "    mode [off|heat|cool|auto] ... set hvac mode"
+    print "    show                      ... show everything"
+    print "    curtemp                   ... print current temperature"
+    print "    curhumid                  ... print current humidity"
     print
     print "examples:"
     print "    nest.py --user joe@user.com --password swordfish temp 73"
@@ -218,6 +232,13 @@ def main():
             print "please specify a fan state of 'on' or 'auto'"
             sys.exit(-1)
         n.set_fan(args[1])
+    elif (cmd == "mode"):
+        if len(args)<2:
+            print "please specify an hvac mode of 'off', 'heat', 'cool', or 'auto'"
+            sys.exit(-1)
+        if args[1] == 'auto':
+            args[1] = 'range'
+        n.set_mode(args[1])
     elif (cmd == "show"):
         n.show_status()
     elif (cmd == "curtemp"):
